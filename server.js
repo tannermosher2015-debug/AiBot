@@ -9,6 +9,20 @@ import { AGENT, runChat } from "./lib/bot.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+
+// Allow the embeddable widget to call this backend from the client's website
+// (a cross-origin request). Note: CORS is a browser guardrail, not abuse
+// protection — add rate limiting before heavy public use.
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) res.header("Access-Control-Allow-Origin", origin);
+  res.header("Vary", "Origin");
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
