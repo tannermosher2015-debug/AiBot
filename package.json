@@ -1,0 +1,14 @@
+{
+  "name": "real-estate-lead-bot",
+  "version": "1.0.0",
+  "description": "AI lead-response & booking demo for real estate agents (Claude API)",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
