@@ -1,0 +1,13 @@
+# Netlify configuration.
+# Static page is served from /public; the chat backend runs as a function.
+[build]
+  command = "npm install"
+  publish = "public"
+  functions = "netlify/functions"
+
+# Make the frontend's POST /chat hit the serverless function.
+[[redirects]]
+  from = "/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+  force = true
