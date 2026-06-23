@@ -1,0 +1,33 @@
+name: keep-render-awake
+
+# Pings the Render instance(s) so the free tier doesn't cold-start (~30–60s)
+# for real visitors. Add each deployed instance's /config URL to the list below.
+#
+# NOTE: GitHub's scheduled runs are best-effort — they are often delayed 5–15+
+# minutes and pause after ~60 days of repo inactivity. For a site you actually
+# rely on, Render's paid "always-on" (~$7/mo) is the reliable fix. This is the
+# free stopgap. Pinging /config is cheap (no model call).
+
+on:
+  schedule:
+    - cron: "*/13 * * * *"   # every 13 min (under Render's ~15 min idle sleep)
+  workflow_dispatch: {}        # allow manual runs from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping instances
+        run: |
+          urls=(
+            "https://aibot-rl1g.onrender.com/config"
+            # "https://YOUR-FRONTLINE-SERVICE.onrender.com/config"   # add after deploy
+          )
+          for url in "${urls[@]}"; do
+            echo "Pinging $url"
+            if curl -fsS --max-time 50 "$url" -o /dev/null; then
+              echo "  ok"
+            else
+              echo "  failed (instance may be waking) — non-fatal"
+            fi
+          done
