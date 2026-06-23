@@ -5,7 +5,8 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import path from "path";
 import { fileURLToPath } from "url";
-import { AGENT, CONFIG, runChat } from "./lib/bot.js";
+import { AGENT, runChat } from "./lib/bot.js";
+import { getAgent, publicConfig } from "./lib/agents.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -38,7 +39,9 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: "120kb" })); // cap payload size
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/config", (_req, res) => res.json({ agent: CONFIG }));
+// Branding/greeting for the widget. `?agent=<key>` picks a persona (defaults to
+// this deploy's agent), so one backend can serve several client widgets.
+app.get("/config", (req, res) => res.json({ agent: publicConfig(getAgent(req.query.agent)) }));
 
 // Throttle /chat per IP — protects against abuse and runaway API spend.
 const chatLimiter = rateLimit({
@@ -63,7 +66,8 @@ function validateChat(req, res, next) {
 
 app.post("/chat", chatLimiter, validateChat, async (req, res) => {
   try {
-    const { reply, messages } = await runChat(req.body.messages);
+    const agent = getAgent(req.body.agent);
+    const { reply, messages } = await runChat(req.body.messages, agent);
     res.json({ reply, messages });
   } catch (err) {
     console.error(err);
