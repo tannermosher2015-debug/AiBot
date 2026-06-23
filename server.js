@@ -4,7 +4,7 @@ import "dotenv/config"; // load .env BEFORE importing the bot (which creates the
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import { AGENT, runChat } from "./lib/bot.js";
+import { AGENT, CONFIG, runChat } from "./lib/bot.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/config", (_req, res) => res.json({ agent: AGENT }));
+app.get("/config", (_req, res) => res.json({ agent: CONFIG }));
 
 app.post("/chat", async (req, res) => {
   try {

@@ -31,29 +31,29 @@
 
   root.innerHTML =
     '<style>' +
-    ':host{all:initial}' +
+    ':host{all:initial;--p:#0d6e6e;--hb:#0f2c2c;--st:#7fd6a6}' +
     '*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}' +
-    '.bubble{position:fixed;bottom:20px;right:20px;width:60px;height:60px;border-radius:50%;border:none;background:#0d6e6e;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:2147483000}' +
-    '.bubble:hover{background:#0b5d5d}' +
+    '.bubble{position:fixed;bottom:20px;right:20px;width:60px;height:60px;border-radius:50%;border:none;background:var(--p);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:2147483000}' +
+    '.bubble:hover{filter:brightness(.92)}' +
     '.panel{position:fixed;bottom:90px;right:20px;width:370px;max-width:calc(100vw - 32px);height:540px;max-height:calc(100vh - 120px);background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;z-index:2147483000}' +
     '.panel[hidden]{display:none}' +
-    '.head{background:#0f2c2c;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}' +
-    '.av{width:38px;height:38px;border-radius:50%;background:#0d6e6e;display:flex;align-items:center;justify-content:center;font-weight:700}' +
+    '.head{background:var(--hb);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}' +
+    '.av{width:38px;height:38px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-weight:700}' +
     '.head .name{font-weight:600;font-size:14px}' +
-    '.head .status{font-size:11px;color:#7fd6a6}' +
+    '.head .status{font-size:11px;color:var(--st)}' +
     '.head .x{margin-left:auto;cursor:pointer;font-size:18px;opacity:.7;background:none;border:none;color:#fff}' +
     '.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;background:#f3f5f4}' +
     '.m{max-width:82%;padding:9px 12px;border-radius:13px;font-size:14px;line-height:1.4}' +
     '.m.bot{background:#fff;color:#13322f;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 2px rgba(0,0,0,.06)}' +
-    '.m.user{background:#0d6e6e;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}' +
+    '.m.user{background:var(--p);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}' +
     '.typing{align-self:flex-start;display:flex;gap:4px;padding:11px 13px;background:#fff;border-radius:13px;box-shadow:0 1px 2px rgba(0,0,0,.06)}' +
     '.typing i{width:7px;height:7px;border-radius:50%;background:#b9c2c0;display:inline-block;animation:b 1.2s infinite}' +
     '.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}' +
     '@keyframes b{0%,60%,100%{opacity:.3}30%{opacity:1}}' +
     '.cmp{display:flex;padding:10px;gap:8px;border-top:1px solid #e4e8e7;background:#fff}' +
     '.cmp input{flex:1;border:1px solid #dfe4e3;border-radius:10px;padding:10px 12px;font-size:14px;outline:none}' +
-    '.cmp input:focus{border-color:#0d6e6e}' +
-    '.cmp button{background:#0d6e6e;color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-size:14px}' +
+    '.cmp input:focus{border-color:var(--p)}' +
+    '.cmp button{background:var(--p);color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-size:14px}' +
     '.cmp button:disabled{opacity:.5}' +
     '</style>' +
     '<button class="bubble" aria-label="Chat">💬</button>' +
@@ -105,11 +105,16 @@
         .then(function (r) { return r.json(); })
         .then(function (data) {
           var a = (data && data.agent) || {};
-          var brand = a.brokerage || "Our Team";
+          var brand = a.brand || a.brokerage || "Our Team";
           root.querySelector("#brand").textContent = brand;
           var initials = brand.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
           root.querySelector("#av").textContent = initials || "··";
-          add("👋 Aloha! You've reached " + brand + ". Are you looking to buy or sell? I can help right now.", "bot");
+          if (a.theme) {
+            if (a.theme.primary) host.style.setProperty("--p", a.theme.primary);
+            if (a.theme.header) host.style.setProperty("--hb", a.theme.header);
+            if (a.theme.status) host.style.setProperty("--st", a.theme.status);
+          }
+          add(a.greeting || ("👋 Aloha! You've reached " + brand + ". Are you looking to buy or sell? I can help right now."), "bot");
         })
         .catch(function () {
           add("👋 Aloha! Are you looking to buy or sell? I can help right now.", "bot");
