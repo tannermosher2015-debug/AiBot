@@ -53,8 +53,7 @@
   <header>
     <div class="nav">
       <a href="https://frontlinewebdesign.tech" class="brand"><span class="dot"></span>Frontline AI</a>
-      <!-- SWAP: point to your Cal.com / Calendly booking link -->
-      <a href="#" class="cta">Book a call</a>
+      <a href="#" class="cta" id="bookCta" target="_blank" rel="noopener">Book a call</a>
     </div>
   </header>
 
@@ -84,6 +83,13 @@
   <!-- The live Frontline assistant. Self-injects a bubble + chat panel and reads
        branding/greeting/theme from /config (so it always matches the backend). -->
   <script src="/widget.js" defer></script>
-  <script>document.getElementById("yr").textContent=new Date().getFullYear();</script>
+  <script>
+    document.getElementById("yr").textContent = new Date().getFullYear();
+    // Point the "Book a call" link at BOOKING_URL (served via /config) — never hardcoded.
+    fetch("/config").then(function (r) { return r.json(); }).then(function (d) {
+      var u = d && d.agent && d.agent.bookingUrl;
+      if (u) document.getElementById("bookCta").href = u;
+    }).catch(function () {});
+  </script>
 </body>
 </html>
