@@ -132,6 +132,7 @@
 
   var history = [];
   var started = false;
+  var sending = false;
 
   function add(text, who) {
     var d = document.createElement("div");
@@ -200,8 +201,10 @@
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (sending) return; // drop concurrent submits while a reply is in flight
     var text = input.value.trim();
     if (!text) return;
+    sending = true;
     add(text, "user");
     history.push({ role: "user", content: text });
     input.value = "";
@@ -231,6 +234,7 @@
         add("⚠️ Connection error — please try again.", "bot");
       })
       .finally(function () {
+        sending = false;
         sendBtn.disabled = false;
         input.focus();
       });
