@@ -15,18 +15,19 @@ const app = express();
 app.set("trust proxy", 1);
 
 // CORS: only reflect origins on the allowlist (ALLOWED_ORIGINS, comma-separated).
-// If unset, fall back to reflecting any origin so the demo keeps working — but warn,
-// because that lets any site call this backend and spend your tokens.
+// Fail-closed: if unset, no cross-origin caller is allowed (same-origin still works,
+// since browsers don't send/enforce CORS for same-origin). This stops any site from
+// calling this backend and spending your tokens. Set ALLOWED_ORIGINS to permit sites.
 const ALLOWED = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
   .map((s) => s.trim())
   .filter(Boolean);
 if (ALLOWED.length === 0) {
-  console.warn("[cors] ALLOWED_ORIGINS not set — reflecting any origin. Set it to lock the widget to your sites.");
+  console.warn("[cors] ALLOWED_ORIGINS not set — cross-origin requests are denied. Set it to allow your sites.");
 }
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  if (origin && (ALLOWED.length === 0 || ALLOWED.includes(origin))) {
+  if (origin && ALLOWED.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
   }
   res.header("Vary", "Origin");
