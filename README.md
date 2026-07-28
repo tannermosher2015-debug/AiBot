@@ -46,8 +46,8 @@ Also update the agent name/brokerage in `public/index.html` (header + avatar + w
 
 In `lib/bot.js`:
 ```js
-const MODEL = "claude-opus-4-8";   // most capable (default)
-// const MODEL = "claude-sonnet-4-6";  // cheaper, still excellent
+const MODEL = "claude-opus-5";     // most capable (default)
+// const MODEL = "claude-sonnet-5";    // cheaper, still excellent
 // const MODEL = "claude-haiku-4-5";   // cheapest + fastest
 ```
 
