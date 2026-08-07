@@ -1,2 +1,8 @@
 node_modules/
 .env
+
+# graphify knowledge-graph output. Local + regenerable, never commit.
+# Several repos here auto-deploy on push (netlify.toml / vercel.json / GH Actions),
+# so an un-ignored graphify-out/ would publish a multi-MB graph.json + graph.html
+# to the live site. Added 2026-08-06 BEFORE the first graph was built.
+graphify-out/
