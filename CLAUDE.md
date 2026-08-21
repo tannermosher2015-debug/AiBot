@@ -11,9 +11,13 @@ Node project. See `package.json`.
 **Netlify** (`netlify.toml` present on disk).
 
 ## Does a push publish?
-**UNCONFIRMED.** Netlify Git deploy publishes on push; a CLI/drop deploy does not.
-Which one this site uses was NOT determined from the repo. Check the Netlify site
-settings before pushing, and replace this line with YES or NO.
+**NO.** This repo has no deploy webhook and no deploying GitHub Action, so nothing is
+listening for a push. Deploys are manual (Hostinger MCP upload, or a Netlify CLI/drop).
+
+Settled 2026-08-21 by `gh api repos/<owner>/<repo>/hooks` across all 48 retrofitted repos,
+plus a check for a deploying GitHub Action. Control: `publicsafetyfactshawaii`, which is
+documented as auto-deploying, returned the Netlify hook, so the test detects git-linkage
+rather than silently returning empty.
 
 ## Remote
 `git@github.com:tannermosher2015-debug/AiBot.git`, branch `main`.
