@@ -19,6 +19,19 @@ plus a check for a deploying GitHub Action. Control: `publicsafetyfactshawaii`, 
 documented as auto-deploying, returned the Netlify hook, so the test detects git-linkage
 rather than silently returning empty.
 
+**CORRECTED 2026-08-21, same day, and it WEAKENS the verdict above: `gh api .../hooks` is the
+right test for NETLIFY and the WRONG test for a HOSTINGER git deploy.** Proven by controlled
+test on `frontline-website`: pushing commit `b024a2c` and doing nothing else redeployed the live
+site inside a minute, while that repo carries ZERO GitHub webhooks. Hostinger's hPanel GIT
+integration triggers without registering a repo-level hook, so a zero here does NOT rule out a
+Hostinger auto-deploy. **Corroborating probe, which does work:** a repo `.md` served live means
+the server holds a git CHECKOUT; a 404 means it holds uploaded output only. Measured 2026-08-21,
+`bronzeage`, `designresource`, `holu`, `freshhaven`, `keokea` and `unclemahis` all 404 their
+`BRIEF.md` while serving their root, so those are zip deploys and the NO above holds for them.
+**For any repo not on that probed list, treat the NO as UNVERIFIED for Hostinger and check hPanel
+-> Advanced -> GIT before relying on it.**
+
+
 ## Remote
 `git@github.com:tannermosher2015-debug/AiBot.git`, branch `main`.
 
