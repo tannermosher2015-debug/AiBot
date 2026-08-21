@@ -20,7 +20,9 @@ documented as auto-deploying, returned the Netlify hook, so the test detects git
 rather than silently returning empty.
 
 **CORRECTED 2026-08-21, same day, and it WEAKENS the verdict above: `gh api .../hooks` is the
-right test for NETLIFY and the WRONG test for a HOSTINGER git deploy.** Proven by controlled
+right test for NETLIFY ONLY. It is the WRONG test for a HOSTINGER git deploy AND for VERCEL,
+which uses a GitHub APP that registers no repo-level webhook (proven on `ohana-pickleball`:
+zero hooks, yet its Vercel production deploy landed 3m21s after the last pushed commit).** Proven by controlled
 test on `frontline-website`: pushing commit `b024a2c` and doing nothing else redeployed the live
 site inside a minute, while that repo carries ZERO GitHub webhooks. Hostinger's hPanel GIT
 integration triggers without registering a repo-level hook, so a zero here does NOT rule out a
