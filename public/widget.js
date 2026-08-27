@@ -105,7 +105,8 @@
     '@media (prefers-reduced-motion: reduce){.typing i{animation:none;opacity:.6}.bubble:hover{filter:none}}';
 
   var panelHtml =
-    '<div class="panel"' + (INLINE ? "" : " hidden") + '>' +
+    '<div class="panel" id="panel"' +
+    (INLINE ? "" : ' role="dialog" aria-labelledby="brand" hidden') + '>' +
     '<div class="head"><div class="av" id="av" aria-hidden="true">··</div>' +
     '<div><div class="name" id="brand">Loading…</div><div class="status">Usually replies instantly</div></div>' +
     (INLINE ? "" : '<button class="x" type="button" aria-label="Close chat">✕</button>') +
@@ -118,7 +119,7 @@
   root.innerHTML =
     "<style>" + css + "</style>" +
     '<div class="' + (INLINE ? "inline" : "floating") + '">' +
-    (INLINE ? "" : '<button class="bubble" type="button" aria-label="Open chat">💬</button>') +
+    (INLINE ? "" : '<button class="bubble" type="button" aria-label="Open chat" aria-expanded="false" aria-controls="panel">💬</button>') +
     panelHtml +
     "</div>";
 
@@ -156,47 +157,82 @@
     }
   }
 
-  // Pull branding from the backend so the widget stays in sync per client.
+  // Fetched once and shared: branding needs it on load, the greeting on first open.
+  var configPromise = null;
+  function loadConfig() {
+    if (configPromise) return configPromise;
+    var configUrl = BASE + "/config" + (AGENT_KEY ? "?agent=" + encodeURIComponent(AGENT_KEY) : "");
+    configPromise = fetch(configUrl)
+      .then(function (r) { return r.json(); })
+      .then(function (data) { return (data && data.agent) || {}; })
+      .catch(function () { return {}; });
+    return configPromise;
+  }
+
+  // Brand and colours only. Runs on load, so a CLOSED bubble is never the wrong
+  // colour: before this split the theme landed on first open, and every visitor
+  // saw the built-in default (a teal) sitting on the client's own palette.
+  function applyBranding(a) {
+    if (!a || !Object.keys(a).length) return; // fetch failed: leave the placeholder
+    var brand = a.brand || a.brokerage || "Our Team";
+    root.querySelector("#brand").textContent = brand;
+    var initials = brand.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
+    root.querySelector("#av").textContent = initials || "··";
+    if (a.theme) {
+      if (a.theme.primary) {
+        host.style.setProperty("--p", a.theme.primary);
+        host.style.setProperty("--on-p", onColor(a.theme.primary));
+      }
+      if (a.theme.header) host.style.setProperty("--hb", a.theme.header);
+      if (a.theme.status) host.style.setProperty("--st", a.theme.status);
+    }
+  }
+
+  // Greeting stays lazy: it is a message, and it should land when the panel opens.
   function start() {
     if (started) return;
     started = true;
-    var configUrl = BASE + "/config" + (AGENT_KEY ? "?agent=" + encodeURIComponent(AGENT_KEY) : "");
-    fetch(configUrl)
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var a = (data && data.agent) || {};
-        var brand = a.brand || a.brokerage || "Our Team";
-        root.querySelector("#brand").textContent = brand;
-        var initials = brand.split(" ").map(function (w) { return w[0]; }).join("").slice(0, 2).toUpperCase();
-        root.querySelector("#av").textContent = initials || "··";
-        if (a.theme) {
-          if (a.theme.primary) {
-            host.style.setProperty("--p", a.theme.primary);
-            host.style.setProperty("--on-p", onColor(a.theme.primary));
-          }
-          if (a.theme.header) host.style.setProperty("--hb", a.theme.header);
-          if (a.theme.status) host.style.setProperty("--st", a.theme.status);
-        }
-        add(a.greeting || ("👋 Aloha! How can I help you today?"), "bot");
-      })
-      .catch(function () {
-        add("👋 Aloha! How can I help you today?", "bot");
-      });
+    loadConfig().then(function (a) {
+      add(a.greeting || "👋 Aloha! How can I help you today?", "bot");
+    });
+  }
+
+  function setOpen(open) {
+    panel.hidden = !open;
+    if (bubble) bubble.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
   function openPanel() {
-    panel.hidden = false;
+    setOpen(true);
     start();
     input.focus();
   }
+
+  // Always hand focus back to the bubble: closing must never strand a keyboard
+  // user at the top of the document with no idea where they are.
+  function closePanel() {
+    setOpen(false);
+    if (bubble) bubble.focus();
+  }
+
+  // Theme as early as we can, for both modes.
+  loadConfig().then(applyBranding);
 
   if (INLINE) {
     start(); // always-open: load greeting immediately, but don't steal focus
   } else {
     bubble.addEventListener("click", function () {
-      if (panel.hidden) openPanel(); else panel.hidden = true;
+      if (panel.hidden) openPanel(); else closePanel();
     });
-    closeBtn.addEventListener("click", function () { panel.hidden = true; });
+    closeBtn.addEventListener("click", closePanel);
+    // Escape closes the panel. Scoped to the panel on purpose: a document-level
+    // listener would swallow Escape for the host page's own dialogs and menus.
+    panel.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.key === "Esc") {
+        e.stopPropagation();
+        closePanel();
+      }
+    });
   }
 
   form.addEventListener("submit", function (e) {
