@@ -4,7 +4,8 @@
   "description": "AI lead-response & booking bot for real estate (Claude API)",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node lib/calcom.test.js && node lib/agents.test.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.40.0",

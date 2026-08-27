@@ -42,6 +42,15 @@ sleep. It was deleted 2026-08-26 as waste. **If this service is ever downgraded 
 free tier, restore it** (see git history).
 
 ## Verify path
+**`npm test` first.** It runs `lib/calcom.test.js` and `lib/agents.test.js`: slot parsing,
+and the assertion that the prompt and tool list follow the calendar configuration. Each
+suite ends with a control that must fail, so a suite asserting nothing cannot pass quietly.
+
+**`node --check` is not enough on `lib/agents.js`.** The prompts interpolate `BOOKING_RULES`
+at module load, so a definition placed below them is a temporal-dead-zone crash that lints
+clean. IMPORT the module (`node -e "import('./lib/agents.js')"`), do not just lint it.
+Measured 2026-08-26, that exact mistake.
+
 NOT `shot.ps1`. This repo is a backend plus an embeddable widget; there is no page of its
 own worth shooting. Verify instead:
 - **Backend:** replay a real conversation against `POST /chat` with
@@ -51,6 +60,21 @@ own worth shooting. Verify instead:
 - **Widget:** load a page that embeds it and read the shadow root. Everything lives inside
   `#lead-bot-host`, so `document.querySelector('*')` will NOT see the bubble. Pierce with
   `document.querySelector('#lead-bot-host').shadowRoot`.
+
+## Real booking (Cal.com)
+`lib/calcom.js`. **OFF unless BOTH `CALCOM_API_KEY` and `CALCOM_EVENT_TYPE_ID` are set**;
+half-configured counts as off. When off, the bot keeps the honest fallback: capture the
+lead, hand over `BOOKING_URL`, claim nothing. When on, it gains a `check_availability`
+tool and can make real reservations, and the prompt swaps to the can-book ruleset.
+
+**Cal.com versions per endpoint and the two values differ.** Slots want
+`cal-api-version: 2024-09-04`, bookings want `2026-02-25`. The wrong value does not error,
+it silently serves an older shape. Both read from cal.com's API reference 2026-08-26.
+`GET /v2/slots` returns an object keyed by DATE, not an array.
+
+**Cal.com needs an EMAIL to name an attendee**, so a phone-only lead cannot be booked.
+That path is handled explicitly and tells the model to ask for an email rather than
+pretend it worked.
 
 ## Landmines
 - **2026-08-26: the bot claimed to book appointments it cannot make.** There is NO calendar
