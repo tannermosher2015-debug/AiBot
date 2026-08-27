@@ -97,7 +97,7 @@
     '.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}' +
     '@keyframes b{0%,60%,100%{opacity:.3}30%{opacity:1}}' +
     '.cmp{display:flex;padding:10px;gap:8px;border-top:1px solid #e4e8e7;background:#fff}' +
-    '.cmp input{flex:1;border:1px solid #dfe4e3;border-radius:10px;padding:10px 12px;font-size:14px;outline:none;color:#13322f}' +
+    '.cmp input{flex:1;border:1px solid #dfe4e3;border-radius:10px;padding:10px 12px;font-size:16px;outline:none;color:#13322f}' +
     '.cmp input:focus-visible{outline:2px solid var(--hb);outline-offset:1px;border-color:var(--hb)}' +
     '.cmp button{background:var(--p);color:var(--on-p);border:none;border-radius:10px;padding:0 16px;font-weight:600;cursor:pointer;font-size:14px}' +
     '.cmp button:disabled{opacity:.5}' +
