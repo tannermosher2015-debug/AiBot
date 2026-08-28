@@ -12,8 +12,10 @@ Owner: Tanner. Started 2026-08-27 from a chat-widget edit batch on frontlinewebd
       simulated. Note the wording is "way better", not "fixed", so if this file is ever
       reopened, do not read it as a clean pass.
 
-- [ ] The SECOND screenshot (9:00, panel running off the right edge with Send cut off) is
-      STILL UNEXPLAINED, and two theories were tested and both failed:
+- [x] The SECOND screenshot (9:00, panel running off the right edge with Send cut off).
+      CLOSED 2026-08-27: Tanner retested on his iPhone after the fix went live and reported
+      all good, so it no longer reproduces. The CAUSE was never identified, and that is
+      worth knowing if it ever comes back. Two theories were tested and both failed:
         1. Page zoom, from the sub-16px input fixed on 2026-08-26. Measured by isolating the
            amber Send button as a connected component in both screenshots: 125px tall in the
            first shot, 135px in the second. 8 percent, not the ~50 percent a zoom would give.
@@ -25,8 +27,11 @@ Owner: Tanner. Started 2026-08-27 from a chat-widget edit batch on frontlinewebd
       shot, clipped, rather than being scaled up. The shipped fix makes the panel span the
       screen below 520px, which should absorb a shift that size, but that is reasoning and
       not a measurement of the original failure.
-      Cheapest way to close this: retest on the iPhone now that the fix is live. If it still
-      happens, send a screenshot taken THAT DAY, and say which page it was on.
+      The most likely explanation left is that spanning the panel across the screen below
+      520px absorbed the shift, but that is INFERENCE. It was never measured against the
+      original failure, and the original screenshot has no date. If this returns, get a
+      screenshot taken THAT DAY plus the page it was on, and start from there rather than
+      re-running the two checks above.
 
 ## Noticed, not changed
 
