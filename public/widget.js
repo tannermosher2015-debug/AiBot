@@ -78,9 +78,10 @@
     '.bubble{position:fixed;bottom:20px;right:20px;width:60px;height:60px;border-radius:50%;border:none;background:var(--p);color:var(--on-p);font-size:26px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:2147483000}' +
     '.bubble:hover{filter:brightness(.92)}' +
     '.bubble:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 6px var(--hb)}' +
-    '.panel{position:fixed;bottom:90px;right:20px;width:370px;max-width:calc(100vw - 32px);height:540px;max-height:calc(100vh - 120px);background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;z-index:2147483000}' +
+    '.panel{position:fixed;bottom:calc(var(--pb,90px) + var(--kb,0px));right:20px;width:370px;max-width:calc(100vw - 32px);height:540px;max-height:calc(100vh - 120px);max-height:calc(var(--vvh,100dvh) - var(--pb,90px) - 24px);background:#fff;border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;z-index:2147483000}' +
     '.panel[hidden]{display:none}' +
     '.inline .panel{position:static;width:100%;height:100%;max-width:none;max-height:none;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.18)}' +
+    '@media (max-width:520px){.panel{left:12px;right:12px;width:auto;max-width:none}}' +
     '.head{background:var(--hb);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}' +
     '.av{width:38px;height:38px;border-radius:50%;background:var(--p);color:var(--on-p);display:flex;align-items:center;justify-content:center;font-weight:700}' +
     '.head .name{font-weight:600;font-size:14px}' +
@@ -213,6 +214,29 @@
   function closePanel() {
     setOpen(false);
     if (bubble) bubble.focus();
+  }
+
+  // iOS anchors position:fixed to the LAYOUT viewport, and that viewport does not
+  // shrink when the keyboard opens. So an open panel keeps its full height, gets
+  // dragged out of the visible area, and leaves its input under the keyboard.
+  // Mirror the VISUAL viewport into two custom properties and let the CSS sit the
+  // panel on top of the keyboard. No visualViewport support means both vars stay
+  // unset and the panel keeps exactly the geometry it had before.
+  var vv = window.visualViewport;
+  function syncViewport() {
+    // How much of the layout viewport is hidden at the bottom: keyboard plus toolbars.
+    var inset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    host.style.setProperty("--kb", inset + "px");
+    host.style.setProperty("--vvh", vv.height + "px");
+    // The 90px gap exists to clear the bubble, and the bubble is behind the keyboard
+    // anyway once it is up, so give that space back to the conversation. The 80px
+    // floor keeps desktop pinch-zoom from reading as a keyboard.
+    host.style.setProperty("--pb", inset > 80 ? "12px" : "90px");
+  }
+  if (!INLINE && vv) {
+    vv.addEventListener("resize", syncViewport);
+    vv.addEventListener("scroll", syncViewport);
+    syncViewport();
   }
 
   // Theme as early as we can, for both modes.
