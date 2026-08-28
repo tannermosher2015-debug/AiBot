@@ -4,11 +4,13 @@ Owner: Tanner. Started 2026-08-27 from a chat-widget edit batch on frontlinewebd
 
 ## Waiting on Tanner
 
-- [ ] "Once you bring iPhone keyboard up the chat bubble all messed up" -> SHIPPED
+- [x] "Once you bring iPhone keyboard up the chat bubble all messed up" -> SHIPPED
       2026-08-27, commit a2a7c57, live on Render about 30s after the push and verified by
-      content against the local source. Still needs a REAL iPhone check, because the
-      keyboard was only ever simulated here. What to check: open the chat, tap the message
-      box, and the header plus the message box should both stay visible above the keyboard.
+      content against the local source. TANNER CHECKED IT ON HIS REAL IPHONE the same day
+      and reported "Way better". That is HIS report of the live behaviour, which is the
+      only evidence that exists for the real keyboard: everything on this machine was
+      simulated. Note the wording is "way better", not "fixed", so if this file is ever
+      reopened, do not read it as a clean pass.
 
 - [ ] The SECOND screenshot (9:00, panel running off the right edge with Send cut off) is
       STILL UNEXPLAINED, and two theories were tested and both failed:
