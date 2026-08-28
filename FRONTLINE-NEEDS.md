@@ -4,18 +4,27 @@ Owner: Tanner. Started 2026-08-27 from a chat-widget edit batch on frontlinewebd
 
 ## Waiting on Tanner
 
-- [ ] "Once you bring iPhone keyboard up the chat bubble all messed up" -> the fix is in
-      `public/widget.js` and is NOT pushed. Render auto-deploys on push to main, and the
-      widget is embedded on every page of the main site, so the push is the publish.
-      Confirm on your real iPhone before it ships, because the keyboard behaviour here was
-      only ever simulated. What to check: open the chat, tap the message box, and the
-      header plus the message box should both stay visible above the keyboard.
+- [ ] "Once you bring iPhone keyboard up the chat bubble all messed up" -> SHIPPED
+      2026-08-27, commit a2a7c57, live on Render about 30s after the push and verified by
+      content against the local source. Still needs a REAL iPhone check, because the
+      keyboard was only ever simulated here. What to check: open the chat, tap the message
+      box, and the header plus the message box should both stay visible above the keyboard.
 
-- [ ] Which day was the SECOND screenshot taken (the 9:00 one, where the panel runs off the
-      right edge and Send is cut off)? Screenshots carry no EXIF date, and the 16px input
-      fix that cures the zoom-driven version of that symptom only landed 2026-08-26. If the
-      shot predates that fix, it is already cured and needs nothing. If it is from after,
-      there is a second cause still to find.
+- [ ] The SECOND screenshot (9:00, panel running off the right edge with Send cut off) is
+      STILL UNEXPLAINED, and two theories were tested and both failed:
+        1. Page zoom, from the sub-16px input fixed on 2026-08-26. Measured by isolating the
+           amber Send button as a connected component in both screenshots: 125px tall in the
+           first shot, 135px in the second. 8 percent, not the ~50 percent a zoom would give.
+           So the page was NOT meaningfully zoomed and this is not the cause.
+        2. The host page scrolling sideways, which drags fixed elements out of place.
+           Measured on the live homepage at 375px wide: scrollWidth equals clientWidth, zero
+           overflow, zero elements past the right edge. Not the cause either.
+      What the measurement DOES say: the panel sat roughly 53 CSS px further right in that
+      shot, clipped, rather than being scaled up. The shipped fix makes the panel span the
+      screen below 520px, which should absorb a shift that size, but that is reasoning and
+      not a measurement of the original failure.
+      Cheapest way to close this: retest on the iPhone now that the fix is live. If it still
+      happens, send a screenshot taken THAT DAY, and say which page it was on.
 
 ## Noticed, not changed
 
@@ -43,4 +52,6 @@ Owner: Tanner. Started 2026-08-27 from a chat-widget edit batch on frontlinewebd
     which is the half that produced the off-the-right-edge symptom.
   Verified: old widget leaves the message box 236px under the keyboard line, patched widget
   keeps it 22px above it. Desktop and inline mode measured pixel-identical to before.
+  Verified again on the LIVE site after deploy: header visible, input above the keyboard,
+  panel inside the screen width, call bar correctly hidden while chatting.
   NOT verified on a real iPhone. That is the open item above.
