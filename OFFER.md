@@ -1,6 +1,6 @@
-# Speed-to-Lead AI — Service Offer
+# Speed-to-Lead AI - Service Offer
 
-*An AI assistant that instantly responds to and books every new lead — 24/7 — so agents stop losing deals to slow follow-up.*
+*An AI assistant that instantly responds to and books every new lead - 24/7 - so agents stop losing deals to slow follow-up.*
 
 ---
 
@@ -8,7 +8,7 @@
 
 Studies consistently show that responding to a new lead within 5 minutes makes you
 far more likely to win them than responding an hour later. But agents are showing
-homes, in meetings, and asleep — so leads go cold and get won by whoever replies first.
+homes, in meetings, and asleep - so leads go cold and get won by whoever replies first.
 
 **Speed-to-Lead AI responds in seconds, every time, day or night.**
 
@@ -16,7 +16,7 @@ homes, in meetings, and asleep — so leads go cold and get won by whoever repli
 
 - A custom AI assistant trained on your business and your market
 - Instantly responds to every new lead
-- Qualifies them automatically — buyer or seller, area, budget, timeline, pre-approval
+- Qualifies them automatically - buyer or seller, area, budget, timeline, pre-approval
 - Answers common questions
 - Books the call or showing straight into your calendar
 - Monthly management, monitoring, and optimization
@@ -24,8 +24,8 @@ homes, in meetings, and asleep — so leads go cold and get won by whoever repli
 ## The ROI
 
 On Maui, where median prices run well over $1M, one closed deal is often
-**$10,000–$25,000+** in commission. If this helps you win **even one extra deal a
-year**, it has paid for itself many times over — and most agents lose more than that
+**$10,000 to $25,000+** in commission. If this helps you win **even one extra deal a
+year**, it has paid for itself many times over - and most agents lose more than that
 in leads they simply never got to in time.
 
 ## Pricing
@@ -51,18 +51,18 @@ integration, multi-source setup, custom website work.
 
 ## How onboarding works
 
-1. **15-minute kickoff call** — I learn your business, market, and how you want leads handled.
-2. **48–72 hours** — I build and test your custom assistant.
-3. **Go live** — we connect it to your website and watch the first real leads come through.
-4. **Ongoing** — I monitor, tune, and report monthly. You just take the booked calls.
+1. **15-minute kickoff call** - I learn your business, market, and how you want leads handled.
+2. **48 to 72 hours** - I build and test your custom assistant.
+3. **Go live** - we connect it to your website and watch the first real leads come through.
+4. **Ongoing** - I monitor, tune, and report monthly. You just take the booked calls.
 
 ---
 
 ### INTERNAL NOTES (remove before sharing with a client)
 
 - **Goal of the pilot tier:** trade price for proof. The first 3 clients exist to
-  generate testimonials, case studies, and referrals — not profit. Once you have
-  1–2 results to show, sell the Standard tier and stop offering free setup.
+  generate testimonials, case studies, and referrals - not profit. Once you have
+  1 to 2 results to show, sell the Standard tier and stop offering free setup.
 - **Hold the line on scope.** Anything outside the "Included" list is a paid add-on.
   Scope creep is what burns out part-time agency owners.
 - **Always anchor on the ROI number**, never on your cost. "$500/mo vs. one $10k deal."

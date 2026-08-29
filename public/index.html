@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Frontline AI — Live Demo</title>
-<meta name="description" content="Talk to the live Frontline AI assistant — the exact AI we install on real estate websites to capture, qualify, and book leads 24/7." />
-<meta property="og:title" content="Frontline AI — talk to the live assistant" />
-<meta property="og:description" content="The exact AI we install on real estate sites. Live in the corner — ask it anything." />
+<title>Frontline AI - Live Demo</title>
+<meta name="description" content="Talk to the live Frontline AI assistant - the exact AI we install on real estate websites to capture, qualify, and book leads 24/7." />
+<meta property="og:title" content="Frontline AI - talk to the live assistant" />
+<meta property="og:description" content="The exact AI we install on real estate sites. Live in the corner - ask it anything." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
@@ -61,7 +61,7 @@
     <section class="hero">
       <span class="eyebrow"><span class="live"></span> Live demo · this is the real assistant</span>
       <h1>Talk to the assistant that <em>never misses a lead.</em></h1>
-      <p class="sub">This is the exact AI we install on real estate websites — it answers, qualifies, and books showings 24/7. It's live in the bottom-right corner. Ask it anything a broker would.</p>
+      <p class="sub">This is the exact AI we install on real estate websites - it answers, qualifies, and books showings 24/7. It's live in the bottom-right corner. Ask it anything a broker would.</p>
       <div class="cue"><span class="ln"></span> Open the chat in the corner to start ↘</div>
 
       <div class="chips">
@@ -75,7 +75,7 @@
 
   <footer>
     <div class="foot">
-      <span>Frontline AI — first to respond. always on call.</span>
+      <span>Frontline AI - first to respond. always on call.</span>
       <span>© <span id="yr">2026</span> Frontline AI</span>
     </div>
   </footer>
@@ -85,7 +85,7 @@
   <script src="/widget.js" defer></script>
   <script>
     document.getElementById("yr").textContent = new Date().getFullYear();
-    // Point the "Book a call" link at BOOKING_URL (served via /config) — never hardcoded.
+    // Point the "Book a call" link at BOOKING_URL (served via /config) - never hardcoded.
     fetch("/config").then(function (r) { return r.json(); }).then(function (d) {
       var u = d && d.agent && d.agent.bookingUrl;
       if (u) document.getElementById("bookCta").href = u;

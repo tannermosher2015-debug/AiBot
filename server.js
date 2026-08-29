@@ -11,7 +11,7 @@ import { getAgent, publicConfig } from "./lib/agents.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-// Behind Render's proxy — trust it so rate limiting sees the real client IP.
+// Behind Render's proxy - trust it so rate limiting sees the real client IP.
 app.set("trust proxy", 1);
 
 // CORS: only reflect origins on the allowlist (ALLOWED_ORIGINS, comma-separated).
@@ -23,7 +23,7 @@ const ALLOWED = (process.env.ALLOWED_ORIGINS || "")
   .map((s) => s.trim())
   .filter(Boolean);
 if (ALLOWED.length === 0) {
-  console.warn("[cors] ALLOWED_ORIGINS not set — cross-origin requests are denied. Set it to allow your sites.");
+  console.warn("[cors] ALLOWED_ORIGINS not set - cross-origin requests are denied. Set it to allow your sites.");
 }
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -44,13 +44,13 @@ app.use(express.static(path.join(__dirname, "public")));
 // this deploy's agent), so one backend can serve several client widgets.
 app.get("/config", (req, res) => res.json({ agent: publicConfig(getAgent(req.query.agent)) }));
 
-// Throttle /chat per IP — protects against abuse and runaway API spend.
+// Throttle /chat per IP - protects against abuse and runaway API spend.
 const chatLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 40, // ~40 messages / 5 min / IP
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: "You're sending messages a little fast — give it a moment and try again." },
+  message: { error: "You're sending messages a little fast - give it a moment and try again." },
 });
 
 // Validate the conversation payload before spending any tokens.
@@ -60,7 +60,7 @@ function validateChat(req, res, next) {
     return res.status(400).json({ error: "Invalid request." });
   }
   if (messages.length > 60) {
-    return res.status(400).json({ error: "This conversation is quite long — please start a new chat." });
+    return res.status(400).json({ error: "This conversation is quite long - please start a new chat." });
   }
   next();
 }
@@ -72,7 +72,7 @@ app.post("/chat", chatLimiter, validateChat, async (req, res) => {
     res.json({ reply, messages });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Something went wrong — please try again." });
+    res.status(500).json({ error: "Something went wrong - please try again." });
   }
 });
 

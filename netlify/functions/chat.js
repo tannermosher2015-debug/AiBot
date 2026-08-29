@@ -1,10 +1,10 @@
-// Netlify serverless function — the production backend for the chat widget.
+// Netlify serverless function - the production backend for the chat widget.
 // It runs the SAME bot logic as the local server (shared in lib/bot.js).
 // The frontend POSTs to /chat, which netlify.toml rewrites to this function.
 import { runChat } from "../../lib/bot.js";
 
 // Per-request guards ported from server.js (express.json limit + validateChat).
-// NOTE: a per-IP rate limit can't live here — serverless invocations don't share
+// NOTE: a per-IP rate limit can't live here - serverless invocations don't share
 // memory, so an in-memory limiter resets every call. Real throttling needs a shared
 // store (e.g. Upstash Redis / Netlify's rate-limit config). These size/count caps
 // are the guards that work statelessly and bound per-request abuse.

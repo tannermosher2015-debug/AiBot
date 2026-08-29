@@ -1,12 +1,12 @@
 /*
- * Frontline AI — embeddable lead-assistant widget.
+ * Frontline AI - embeddable lead-assistant widget.
  *
- * Floating mode (default): drop one line into any website —
+ * Floating mode (default): drop one line into any website:
  *   <script src="https://aibot-rl1g.onrender.com/widget.js" defer></script>
  * It injects a floating chat bubble that talks to the bot backend.
  *
  * Inline mode: add a mount element and the widget renders an always-open chat
- * panel inside it (no bubble) —
+ * panel inside it (no bubble):
  *   <div data-frontline-ai-inline style="height:540px"></div>
  *   <script src="https://aibot-rl1g.onrender.com/widget.js" defer></script>
  *
@@ -18,7 +18,7 @@
   if (window.__leadBotLoaded) return;
   window.__leadBotLoaded = true;
 
-  // This script's own element — used to find the backend origin and data-agent.
+  // This script's own element - used to find the backend origin and data-agent.
   function getScript() {
     var s = document.currentScript;
     if (!s) {
@@ -291,7 +291,7 @@
       })
       .catch(function () {
         typing(false);
-        add("⚠️ Connection error — please try again.", "bot");
+        add("⚠️ Connection error - please try again.", "bot");
       })
       .finally(function () {
         sending = false;

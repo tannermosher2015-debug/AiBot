@@ -1,4 +1,4 @@
-# Real Estate Lead Bot — Maui County
+# Real Estate Lead Bot - Maui County
 
 An AI lead-response & booking assistant for Maui real estate agents, built on the
 Claude API. A buyer/seller messages the website chat widget → the AI instantly
@@ -11,7 +11,7 @@ Runs **locally** (Express) and deploys to **Netlify** (serverless) from the same
 
 | File | What it is |
 |------|------------|
-| `lib/bot.js` | The brain — system prompt, tools, Maui knowledge, and the chat logic. **Edit the `AGENT` config and `MODEL` here.** |
+| `lib/bot.js` | The brain - system prompt, tools, Maui knowledge, and the chat logic. **Edit the `AGENT` config and `MODEL` here.** |
 | `lib/listings.js` | Sample Maui/Molokai listings the bot can search (demo data). |
 | `server.js` | Local dev server (run this on your machine). |
 | `netlify/functions/chat.js` | The same bot, as a serverless function for Netlify. |
@@ -54,15 +54,15 @@ const MODEL = "claude-opus-5";     // most capable (default)
 ## Listings & MLS
 
 The bot searches listings via the `search_listings` tool, reading from
-`lib/listings.js` — **sample listings for demos only.** Don't present these to a real
+`lib/listings.js` - **sample listings for demos only.** Don't present these to a real
 buyer as live inventory.
 
 **For a paying client**, swap the data source for their real listings:
 - **Live MLS / IDX feed** via an approved vendor (SimplyRETS, Trestle/CoreLogic,
-  Bridge/Zillow Group, Spark API) — requires the agent's MLS membership.
+  Bridge/Zillow Group, Spark API) - requires the agent's MLS membership.
 - Or start simple: load the agent's own active listings into `lib/listings.js`.
 
-The tool contract stays the same — only the `searchListings()` body in `lib/bot.js`
+The tool contract stays the same - only the `searchListings()` body in `lib/bot.js`
 changes. This is a premium, per-client add-on.
 
 ## Deploy to Netlify (live link)
