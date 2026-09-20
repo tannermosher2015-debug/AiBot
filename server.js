@@ -14,17 +14,26 @@ const app = express();
 // Behind Render's proxy - trust it so rate limiting sees the real client IP.
 app.set("trust proxy", 1);
 
-// CORS: only reflect origins on the allowlist (ALLOWED_ORIGINS, comma-separated).
-// Fail-closed: if unset, no cross-origin caller is allowed (same-origin still works,
-// since browsers don't send/enforce CORS for same-origin). This stops any site from
-// calling this backend and spending your tokens. Set ALLOWED_ORIGINS to permit sites.
-const ALLOWED = (process.env.ALLOWED_ORIGINS || "")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
-if (ALLOWED.length === 0) {
-  console.warn("[cors] ALLOWED_ORIGINS not set - cross-origin requests are denied. Set it to allow your sites.");
-}
+// CORS: only reflect origins on the allowlist. Anything not listed is denied, which
+// stops any site from calling this backend and spending your tokens. (Same-origin still
+// works; browsers don't send/enforce CORS for same-origin.)
+// Frontline's own sites are baked in rather than left to the env var: the site moved to
+// the .com on 2026-09-08 and the Render ALLOWED_ORIGINS edit did not take, so every page
+// on frontlinewebdesigns.com had a dead chat until 2026-09-19. A deploy can verify code;
+// it cannot verify a dashboard field. ALLOWED_ORIGINS still works and ADDS to this list.
+const BRAND_ORIGINS = [
+  "https://frontlinewebdesigns.com",
+  "https://www.frontlinewebdesigns.com",
+  "https://frontlinewebdesign.tech",
+  "https://www.frontlinewebdesign.tech",
+  "https://aibot-rl1g.onrender.com",
+];
+const ALLOWED = BRAND_ORIGINS.concat(
+  (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+);
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin && ALLOWED.includes(origin)) {
